@@ -4,9 +4,11 @@ namespace App\Http\Livewire;
 
 use App\Imports\InvoiceItemsImport;
 use App\Imports\InvoicesImport;
+use App\Models\UploadedFile;
 use Filament\Notifications\Notification;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -25,16 +27,27 @@ class UploadFile extends Component
     public function upload()
     {
         $this->validate([
-            'file' => 'required|file|max:20480', // 20MB Max
+            'file' => 'required|file|max:204800', // 200MB Max
             'fileType' => 'required|string|in:tickets,items'
         ]);
 
-        DB::table('invoices')->truncate();
-        DB::table('invoice_items')->truncate();
+
+        if (UploadedFile::where('type', $this->fileType)->where('date', now()->toDateString())->exists()) {
+            Notification::make()
+                ->title('This file uploaded before')
+                ->danger()
+                ->send();
+            return;
+        }
         if ($this->fileType == "tickets") {
-            Excel::queueImport(new InvoicesImport, $this->file)->onQueue('invoices');
-        } else
-            Excel::queueImport(new InvoiceItemsImport, $this->file)->onQueue('invoice-items');
+            Cache::forget('last-date');
+            Excel::queueImport(new InvoicesImport, $this->file)->allOnQueue('invoices');
+        } else {
+            Cache::forget('item-last-date');
+            Excel::queueImport(new InvoiceItemsImport, $this->file)->allOnQueue('invoice-items');
+        }
+
+        UploadedFile::create(['type' => $this->fileType, 'date' => now()->toDateString()]);
         Notification::make()
             ->title('Uploaded successfully')
             ->success()

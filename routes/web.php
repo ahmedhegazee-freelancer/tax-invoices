@@ -29,6 +29,7 @@ Route::get('/', function () {
 });
 
 
-Route::get('invoices', function () {
-    return InvoiceService::make()->getLastInvoiceDate();
-});
+// Route::get('invoices', function () {
+//     dd('2022-01-21 13:52:44' > InvoiceService::make()->getLastInvoiceDate());
+//     return;
+// });

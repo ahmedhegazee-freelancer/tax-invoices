@@ -17,6 +17,7 @@ class InvoiceItem extends Model
         'sub_total',
         'total',
         'discount',
+        'create_date'
     ];
     protected $casts = [
         'sub_total' => 'double',

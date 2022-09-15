@@ -17,6 +17,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('queue:work --queue=invoices --stop-when-empty')->everyMinute();
         $schedule->command('queue:work --queue=invoice-items --stop-when-empty')->everyMinute();
+        $schedule->command('queue:work --queue=send-invoices --stop-when-empty')->everyMinute();
         // $schedule->command('inspire')->hourly();
     }
 

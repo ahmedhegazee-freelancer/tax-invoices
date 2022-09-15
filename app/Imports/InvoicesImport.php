@@ -8,6 +8,7 @@ use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Maatwebsite\Excel\Jobs\ReadChunk;
 
 class InvoicesImport implements ToModel, WithBatchInserts, WithChunkReading, ShouldQueue
 {
@@ -16,12 +17,15 @@ class InvoicesImport implements ToModel, WithBatchInserts, WithChunkReading, Sho
      *
      * @return \Illuminate\Database\Eloquent\Model|null
      */
+
     public function model(array $row)
     {
         //skip first row
         if ($row[0] == 'ID') {
             return null;
         }
+        if (!($row[8] > InvoiceService::make()->getLastInvoiceDate()))
+            return null;
         // //skip not paid
         // if (!$row[12]) {
         //     return null;

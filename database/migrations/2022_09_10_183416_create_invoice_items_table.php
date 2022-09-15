@@ -24,6 +24,7 @@ return new class extends Migration
             $table->decimal('sub_total');
             $table->decimal('total');
             $table->decimal('discount');
+            $table->dateTime('create_date');
             $table->timestamps();
         });
     }

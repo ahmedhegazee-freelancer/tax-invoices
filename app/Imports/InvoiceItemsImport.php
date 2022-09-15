@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Models\InvoiceItem;
+use App\Services\InvoiceService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
@@ -20,15 +21,18 @@ class InvoiceItemsImport implements ToModel, WithBatchInserts, WithChunkReading,
         if ($row[0] == 'ID') {
             return null;
         }
+        if (!($row[4] > InvoiceService::make()->getLastInvoiceItemDate()))
+            return null;
         return new InvoiceItem([
-            'item_id' => $row[0],
-            'ticket_id' => $row[81],
-            'name' => $row[9],
-            'quantity' => $row[7],
-            'price' => $row[18],
-            'sub_total' => $row[22],
-            'total' => $row[32],
-            'discount' => $row[24],
+            'item_id'       => $row[0],
+            'ticket_id'     => $row[81],
+            'name'          => $row[9],
+            'quantity'      => $row[7],
+            'price'         => $row[18],
+            'sub_total'     => $row[22],
+            'total'         => $row[32],
+            'discount'      => $row[24],
+            'create_date'   => $row[4],
         ]);
     }
     public function chunkSize(): int

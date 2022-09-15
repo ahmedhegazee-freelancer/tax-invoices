@@ -20,11 +20,25 @@ class InvoiceService
             static::$instance = new self();
         return static::$instance;
     }
-
+    public function getLastInvoiceDate()
+    {
+        return Cache::rememberForever('last-date', function () {
+            return DB::table('invoices')->select(['closing_date'])->orderByDesc('closing_date')->limit(1)->first()?->closing_date;
+        });
+    }
+    public function getLastInvoiceItemDate()
+    {
+        return Cache::rememberForever('item-last-date', function () {
+            return DB::table('invoice_items')->select(['create_date'])->orderByDesc('create_date')->limit(1)->first()?->create_date;
+        });
+    }
     public function send(array $invoices)
     {
         $signatures = SignaturesService::make()->get();
-        Http::post();
+        Http::post('', [
+            'receipts' => $invoices,
+            'signatures' => $signatures,
+        ]);
     }
     public function getPrevious($date)
     {
