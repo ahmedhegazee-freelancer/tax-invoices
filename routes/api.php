@@ -21,5 +21,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('import-csv', function () {
-    Excel::queueImport(new InvoiceItemsImport, request()->file('csv'));
+    Excel::queueImport(new InvoicesImport, request()->file('csv'));
 });

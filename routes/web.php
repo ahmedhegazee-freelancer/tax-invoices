@@ -30,22 +30,5 @@ Route::get('/', function () {
 
 
 Route::get('invoices', function () {
-
-    $startDate = null;
-    // DB::table('invoices')->select(['id'])
-    //     ->when($startDate, fn ($query) => $query->whereDate('closing_date', '>=', $startDate))
-    //     ->where('paid', true)
-    //     ->where('deleted', false)
-    //     ->where('voided', false)
-    //     ->orderBy('id')
-    //     ->chunk(10, function ($chunk) {
-
-    //         // SendInvoicesJob::dispatch($chunk->pluck('id')->toArray())->onQueue('send-invoices');
-    //     });
-    
-
-    return $receipts;
-    // InvoiceService::make()->formatInvoices();
-    // Str::uuid()
-    // return HeaderFormatter::make()->generateUUID("1646881391584");
+    return InvoiceService::make()->getLastInvoiceDate();
 });

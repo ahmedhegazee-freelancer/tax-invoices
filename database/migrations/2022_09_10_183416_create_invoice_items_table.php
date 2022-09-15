@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('item_id');
             $table->unsignedBigInteger('ticket_id');
-            $table->foreign('ticket_id')->references('ticket_id')->on('invoices')->cascadeOnDelete();
+            // $table->foreign('ticket_id')->references('ticket_id')->on('invoices')->cascadeOnDelete();
             $table->string('name');
             $table->float('quantity');
             $table->decimal('price');

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Jobs\SendInvoicesJob;
 use App\Models\Invoice;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
@@ -19,6 +20,7 @@ class InvoiceService
             static::$instance = new self();
         return static::$instance;
     }
+
     public function send(array $invoices)
     {
         $signatures = SignaturesService::make()->get();

@@ -38,11 +38,10 @@ class InvoiceItemFormatter
                 'unitType' => 'KGM',
                 'quantity' => $item->quantity,
                 'unitPrice' => $item->price, //price
-                'netSale' => '',
+                'netSale' => $item->sub_total,
                 'totalSale' => $item->sub_total, //subtotal
                 'total' => $item->total, //total price
-                //discount
-                // 'taxableItems' => $this->formatTax($item->tax)
+
             ];
         if ($item->discount)
             $itemFormatted['commercialDiscountData'] = [
