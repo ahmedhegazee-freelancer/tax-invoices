@@ -6,6 +6,7 @@ use App\Models\BranchAddressSetting;
 use App\Models\BusinessSetting;
 use App\Models\Invoice;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 
 class InvoiceFormatter
 {
@@ -25,6 +26,10 @@ class InvoiceFormatter
     }
     public function initialize()
     {
+        Cache::forget('business_settings');
+        Cache::forget('branch_address');
+        $this->businessSettings = [];
+        $this->branchAddress = [];
         if (!count($this->businessSettings)) {
             $this->businessSettings = BusinessSettingsService::make()->get();
         }

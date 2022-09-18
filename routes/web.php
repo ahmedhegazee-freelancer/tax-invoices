@@ -27,7 +27,12 @@ Route::get('/', function () {
 
     return view('welcome');
 });
-
+Route::get('invoices', function () {
+    return [
+        'receipts' => InvoiceService::make()->formatInvoices([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),
+        'signatures' => []
+    ];
+});
 
 // Route::get('invoices', function () {
 //     dd('2022-01-21 13:52:44' > InvoiceService::make()->getLastInvoiceDate());

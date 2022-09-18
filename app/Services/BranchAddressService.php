@@ -14,7 +14,7 @@ class BranchAddressService
     }
     public static function make()
     {
-        if (is_null(static::$instance))
+        if (!isset(static::$instance))
             static::$instance = new self();
         return static::$instance;
     }
